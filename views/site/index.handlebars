@@ -1,0 +1,62 @@
+{{>header}}
+
+<div class="home">
+   <div class="wrapper">
+      {{>posts}}
+
+      {{#if userLink}}
+
+      {{/if}}
+   </div>
+</div>
+
+<script>
+const canScroll = {{canScroll}};
+if (!canScroll) {
+   document.body.style.overflow = 'hidden'; // Scrolling'i devre dışı bırak
+}
+
+document.querySelectorAll('.rating').forEach(async (ratingElement) => {
+    const projectId = ratingElement.getAttribute('data-project-id');
+
+    try {
+        const response = await fetch(/ratings/${projectId});
+        const { averageRating } = await response.json();
+
+        document.querySelector(.rating[data-project-id="${projectId}"] .average-rating)
+            .textContent = Ortalama Puan: ${averageRating.toFixed(1)};
+    } catch (error) {
+        console.error('Puanlar alınırken hata:', error);
+    }
+});
+</script>
+
+
+
+<script>
+   // Dinamik olarak belirlenen 'canScroll' değişkenini kontrol et
+   const canScroll = {{canScroll}};
+   if (!canScroll) {
+      // Eğer canScroll 'false' ise, sayfanın kaydırılmasını devre dışı bırak
+      document.body.style.overflow = 'hidden';
+   }
+
+   // Sayfada bulunan tüm '.rating' sınıfına sahip elemanları seç
+   document.querySelectorAll('.rating').forEach(async (ratingElement) => {
+       // Her 'rating' elemanının proje ID'sini al
+       const projectId = ratingElement.getAttribute('data-project-id');
+
+       try {
+           // Belirli proje ID'si için mevcut ortalama puanı almak üzere API'ye GET isteği gönder
+           const response = await fetch(`/ratings/${projectId}`);
+           const { averageRating } = await response.json();
+
+           // Gelen ortalama puanı ilgili proje elemanında görüntüle
+           document.querySelector(`.rating[data-project-id="${projectId}"] .average-rating`)
+               .textContent = `Average Rating : ${averageRating.toFixed(1)}`;
+       } catch (error) {
+           // Hata oluşursa konsola yazdır
+           console.error('Error while saving score :', error);
+       }
+   });
+</script>

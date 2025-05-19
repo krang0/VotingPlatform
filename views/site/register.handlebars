@@ -1,0 +1,85 @@
+<div class="register">
+   <img src="/img/background/register.jpg" alt="register">
+   <form id="register">
+      <div class="formGroup">
+         <input type="text" name="email" required>
+         <span>Email *</span>
+      </div>
+
+      <div class="formGroup">
+         <input type="text" name="username" required>
+         <span>Username *</span>
+      </div>
+
+      <div class="formGroup passwordGroup">
+         <input type="password" name="password" id="password" required>
+         <span>Password *</span>
+         <button type="button" id="togglePassword" class="toggle-password" title="Show Password">&#128065;</button>
+      </div>
+
+      <div class="btnGroup">
+         <a href="/login">Do you have an account?</a>
+         <button type="submit">Register</button>
+      </div>
+   </form>
+</div>
+
+<style>
+   .formGroup {
+      position: relative;
+      margin-bottom: 15px;
+   }
+
+   .passwordGroup input[type="password"] {
+      width: calc(100% - 40px); /* Leave space for the toggle button */
+      padding-right: 40px;
+   }
+
+   .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: transparent; /* Remove background */
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 5px;
+   }
+
+   .toggle-password:focus {
+      outline: none;
+   }
+</style>
+
+<script>
+   // Kayıt formunu seç
+   const register = document.getElementById('register');
+
+   // Formun 'submit' olayını dinle
+   register.addEventListener('submit', (e) => {
+      e.preventDefault(); // Formun varsayılan gönderim davranışını engelle
+
+      // Form verilerini al
+      const formData = new FormData(e.target);
+
+      // Kayıt işlemi için sunucuya POST isteği gönder
+      fetch('/register', {
+         method: 'post', // POST metodu kullanılıyor
+         body: formData // Form verileri gönderiliyor
+      })
+         .then((response) => response.json()) // Sunucudan gelen yanıt JSON formatına dönüştürülüyor
+         .then((res) => {
+            if (res.case) {
+               // Eğer işlem başarılıysa, kullanıcı 2 saniye sonra giriş sayfasına yönlendiriliyor
+               setTimeout(() => {
+                  window.location.href = '/login';
+               }, 2000);
+            } else {
+               // Başarısız durumda kullanıcıya hata mesajı gösteriliyor
+               alert(res.message); 
+            }
+         });
+   });
+</script>
+

@@ -1,0 +1,72 @@
+{{#if data}}
+<div class="single">
+   <div class="wrapper">
+      <input id="id" type="text" style="display: none;" value="{{data._id}}">
+      <h2>
+         {{data.title}}
+         <div class="button">
+            {{#if userLink}}
+            <button title="Edit Post" id="editButton">
+               <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button title="Delete Post" id="deleteButton">
+               <i class="fa-regular fa-trash-can"></i>
+            </button>
+            {{/if}}
+         </div>
+      </h2>
+      <img src="{{data.imgURL}}" alt="single">
+      <p>{{data.content}}</p>
+      <div class="authorAndDate">
+         <span>{{data.author}}</span>
+         <span>{{data.date}}</span>
+      </div>
+   </div>
+</div>
+
+
+{{#if userLink}}
+<script>
+   // Düzenle ve silme işlemleri için gerekli HTML elementlerini seç
+   const editButton = document.getElementById('editButton'); // Düzenle butonu
+   const deleteButton = document.getElementById('deleteButton'); // Silme butonu
+   const inputID = document.getElementById('id'); // ID'yi içeren input alanı
+
+   // Düzenle butonu tıklama olayını dinle
+   editButton.addEventListener('click', () => {
+      const id = inputID.value; // ID değerini al
+      window.location.href = `/admin/edit/${id}`; // Kullanıcıyı düzenleme sayfasına yönlendir
+   });
+
+   // Silme butonu tıklama olayını dinle
+   deleteButton.addEventListener('click', () => {
+      const id = inputID.value; // ID değerini al
+      const formData = new FormData(); // Yeni bir FormData nesnesi oluştur
+      formData.append('id', id); // FormData'ya ID'yi ekle
+
+      // Silme işlemi için sunucuya POST isteği gönder
+      fetch('/admin/delete', {
+         method: 'post', // POST metodu kullan
+         body: formData // Form verilerini gönder
+      })
+         .then((response) => response.json()) // Yanıtı JSON formatında işle
+         .then((res) => {
+            if (res.case) {
+               // Eğer silme işlemi başarılıysa, konsola yazdır ve ana sayfaya yönlendir
+               console.log(res);
+               setTimeout(() => {
+                  window.location.href = '/';
+               }, 3000); // 3 saniye sonra yönlendirme
+            } else {
+               // İşlem başarısızsa sunucudan dönen mesajı konsola yazdır
+               console.log(res);
+            }
+         })
+         .catch((err) => {
+            // Hata durumunda konsola hata mesajını yazdır
+            console.log(err);
+         });
+   });
+</script>
+{{/if}}
+{{/if}}

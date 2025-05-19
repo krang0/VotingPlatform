@@ -1,0 +1,223 @@
+/* Genel Posts Alanı */
+.posts {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: flex-start; /* Projeleri sayfa ortasına hizala */
+   gap: 50px; /* Yan yana olan projeler arasında boşluk */
+   padding: 20px;
+}
+
+/* Tekil Postlar */
+.post {
+   width: calc(50% - 20px); /* 2 sütun düzeni, her postun genişliği %50 */
+   max-width: 400px;
+   height: 300px;
+   background-color: #fff;
+   border: 1px solid #ddd;
+   border-radius: 10px;
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   display: flex;
+   flex-direction: column;
+   overflow: hidden;
+   transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.posts {
+   background-color: white; /* Gri arka plan */
+   padding: 20px; /* İçerik ile kenar arasında boşluk */
+   border-radius: 10px; /* Köşeleri hafif yuvarlat */
+}
+
+
+.post:hover {
+   transform: translateY(-5px);
+   box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Post Görselleri */
+.post-image {
+   width: 100%;
+   height: 150px;
+   object-fit: cover; /* Görsellerin taşmadan sığması sağlanır */
+   border-bottom: 1px solid #ddd;
+}
+
+/* Post İçerik Alanı */
+.post-content {
+   padding: 15px;
+   display: flex;
+   flex-direction: column;
+   justify-content: space-betweens;
+   flex-grow: 1;
+}
+
+/* Başlık */
+.post-title {
+   font-size: 1.2rem;
+   font-family: 'Pacifico', cursive;
+   color: #333;
+   white-space: nowrap;
+   overflow: hidden;
+   text-overflow: ellipsis; /* Başlık uzunluğu sınırlandırılır */
+   margin-bottom: 10px;
+}
+
+/* Açıklama */
+.post-description {
+   font-size: 0.9rem;
+   font-family: 'Arvo', serif;
+   color: #555;
+   overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 3; /* 3 satırda açıklama sınırlandırılır */
+   -webkit-box-orient: vertical;
+   margin-bottom: 15px;
+}
+
+/* Meta Bilgiler */
+.post-meta {
+   font-size: 0.8rem;
+   color: #777;
+   margin-bottom: 10px;
+   display: flex;
+   justify-content: space-between;
+   font-family: 'Dancing Script', cursive;
+}
+
+/* Detay Linki */
+.post-link {
+   text-decoration: none;
+   color: #007bff;
+   font-size: 0.9rem;
+   font-weight: bold;
+   align-self: flex-start;
+   margin-top: auto;
+}
+
+.post-link:hover {
+   text-decoration: underline;
+}
+
+.star {
+   font-size: 25px; /* Yıldız boyutu */
+   color: #9BBEC8; /* Başlangıçta gri, boş yıldız */
+   cursor: pointer;
+   transition: color 0.3s ease; /* Yıldızın dolma geçişi için animasyon */
+   border: 2px solid transparent; /* Başlangıçta etrafında şeffaf kenarlık */
+   border-radius: 50%;
+   padding:0px;
+}
+
+.star:hover,
+.star.hover {
+   color: #164863; /* Mouse üzerine geldiğinde altın renkli yıldız */
+   border-color: #164863; /* Etrafını sarı yapmak için */
+}
+
+#myButton {
+        background-color: #9BBEC8;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #myButton:hover {
+        background-color: #164863;
+    }
+
+.average-rating{
+   color: #164863;
+   padding: 10px 20px;
+   border: none;
+   border-radius: 5px;
+   font-size: 18px;
+
+}
+.post-title{
+   color: #427D9D;
+   font-style: normal;
+   font-family: 'Times New Roman', Times, serif;
+
+}
+.post-description{
+   color: #427D9D;
+
+   }
+   .post-meta{
+   color: #427D9D;
+   font-size: 15px;
+   font-family: 'Times New Roman', Times, serif;
+
+}
+.post-link{
+   color: #9BBEC8;
+}
+
+.rating {
+   display: block;
+   margin-top: 75px;
+   background-color: #DDF2FD;
+   padding: 4px;
+   border-radius: 4px;
+   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.rating-form {
+   display: flex;
+   flex-direction: column;
+   gap: 4px;
+}
+
+.rating-form input {
+   padding: 5px;
+   font-size: 15px;
+   border-radius: 5px;
+   border: 2px solid #164863;
+   
+   box-sizing: border-box;
+}
+
+.rating-form input:focus {
+   border-color: #164863;
+   outline: none;
+}
+
+.submit-rating {
+   padding: 5px 5px;
+   font-size: 15px;
+   background-color: #164863;
+   color: #DDF2FD;
+   border: none;
+   border-radius: 30px;
+   cursor: pointer;
+   transition: background-color 0.3s;
+}
+
+.submit-rating:hover {
+   background-color: #427D9D;
+}
+
+.average-rating {
+   font-size: 16px;
+   font-weight: bold;
+   color: #164863;
+   margin-top: 15px;
+}
+
+label[for^="rating1-"] {
+   color: #164863;
+
+}
+
+label[for^="rating2-"] {
+   color: #164863;
+
+}
+
+label[for^="rating3-"] {
+   color: #164863;
+
+}

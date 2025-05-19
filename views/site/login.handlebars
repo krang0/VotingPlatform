@@ -1,0 +1,81 @@
+<div class="register">
+   <img src="/img/background/login.jpg" alt="login">
+   <form id="login">
+      <div class="formGroup">
+         <input type="text" name="username" required>
+         <span>Username *</span>
+      </div>
+
+      <div class="formGroup passwordGroup">
+         <!-- Password input and toggle icon -->
+         <input type="password" name="password" id="password" required>
+         <span>Password *</span>
+         <button type="button" id="togglePassword" class="toggle-password" title="Show Password">&#128065;</button>
+      </div>
+
+      <div class="btnGroup">
+         <a href="/login">Don't you have an account?</a>
+         <button type="submit">Login</button>
+      </div>
+   </form>
+</div>
+
+<script>
+   const login = document.getElementById('login');
+   const passwordInput = document.getElementById('password');
+   const togglePassword = document.getElementById('togglePassword');
+
+   // Show password on hover
+   togglePassword.addEventListener('mouseenter', () => {
+      passwordInput.type = 'text'; // Show password
+   });
+
+   // Hide password when no longer hovering
+   togglePassword.addEventListener('mouseleave', () => {
+      passwordInput.type = 'password'; // Hide password
+   });
+
+   login.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      fetch('/login', {
+         method: 'post',
+         body: formData
+      }).then((response) => response.json())
+      .then(res => {
+         if (res.case) {
+            window.location.href = '/';
+         } else {
+            console.log(res);
+         }
+      });
+   });
+</script>
+
+<style>
+   .formGroup {
+      position: relative;
+      margin-bottom: 15px;
+   }
+
+   .passwordGroup input[type="password"] {
+      width: calc(100% - 40px);
+      padding-right: 40px; 
+   }
+
+   .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 5px;
+   }
+
+   .toggle-password:focus {
+      outline: none;
+   }
+</style>

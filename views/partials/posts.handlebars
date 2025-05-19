@@ -1,0 +1,139 @@
+<div class="posts">
+   {{#each contents}}
+   <div class="post">
+      <img src="{{imgURL}}" alt="Post Görseli" class="post-image">
+      <div class="post-content">
+         <h2 class="post-title">{{title}}</h2>
+         <p class="post-description">{{content}}</p>
+         <div class="post-meta">
+            <span class="post-author">Contributor: {{author}}</span>
+            <span class="post-date">Date: {{date}}</span>
+         </div>
+         <a href="/single/{{_id}}" class="post-link">View Details</a>
+      </div>
+   </div>
+
+   <!-- Puanlama Alanı -->
+   <div class="rating" data-project-id="{{_id}}" style="display: block; margin-top: 75px;">
+      <form class="rating-form" id="rating-form-{{_id}}">
+         <div style="margin-bottom: 10px;">
+            <label for="rating1-{{_id}}">&nbsp;&nbsp;Design</label>
+            <input type="number" id="rating1-{{_id}}" name="rating1" placeholder="1 to 5" min="1" max="5" step="0.1" required>
+         </div>
+         <div style="margin-bottom: 10px;">
+            <label for="rating2-{{_id}}">&nbsp;Content</label>
+            <input type="number" id="rating2-{{_id}}" name="rating2" placeholder="1 to 5" min="1" max="5" step="0.1" required>
+         </div>
+         <div style="margin-bottom: 10px;">
+            <label for="rating3-{{_id}}">Features</label>
+            <input type="number" id="rating3-{{_id}}" name="rating3" placeholder="1 to 5" min="1" max="5" step="0.1" required>
+         </div>
+         <button type="submit" class="submit-rating">Submit</button>
+      </form>
+      <p class="average-rating" id="average-rating-{{_id}}">Average Point: Loading...</p>
+   </div>
+   {{/each}}
+</div>
+
+<script>
+document.querySelectorAll('.rating-form').forEach(form => {
+    // Tüm ".rating-form" sınıfına sahip formları seç ve her biri için bir olay dinleyicisi ekle
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); // Formun varsayılan gönderimini engelle
+
+        // Formun en yakın ".rating" elemanından proje ID'sini al
+        const projectId = form.closest('.rating').getAttribute('data-project-id');
+
+        // İlgili giriş alanlarından değerleri al ve sayıya çevir
+        const rating1 = parseFloat(document.getElementById(`rating1-${projectId}`).value);
+        const rating2 = parseFloat(document.getElementById(`rating2-${projectId}`).value);
+        const rating3 = parseFloat(document.getElementById(`rating3-${projectId}`).value);
+
+        // Eğer puanlardan biri geçerli bir sayı değilse, kullanıcıyı uyar ve işlemi durdur
+        if (isNaN(rating1) || isNaN(rating2) || isNaN(rating3)) {
+            alert('Please enter all scores correctly !');
+            return;
+        }
+
+        // Ortalama puanı hesapla ve virgülden sonra 1 basamak göster
+        const averageRatingInput = ((rating1 + rating2 + rating3) / 3).toFixed(1);
+
+        try {
+            // Puanı sunucuya POST isteği ile gönder
+            const response = await fetch('/ratings/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ project_id: projectId, rating: parseFloat(averageRatingInput) })
+            });
+
+            // Sunucudan gelen yanıtı JSON olarak ayrıştır
+            const result = await response.json();
+
+            if (response.ok) {
+                // Eğer yanıt başarılıysa, ortalama puanı güncelle ve kullanıcıya bilgi ver
+                document.querySelector(`.rating[data-project-id="${projectId}"] .average-rating`)
+                    .textContent = `Average Rating : ${result.averageRating.toFixed(1)}`;
+                alert('Score has been submitted successfully !');
+            } else {
+                // Başarısız yanıt durumunda hata mesajını konsola yazdır
+                console.error(result.message);
+            }
+        } catch (error) {
+            // İstek sırasında hata oluşursa konsola yazdır
+            console.error('Error while saving score :', error);
+        }
+    });
+});
+
+// Tüm ".rating" sınıfına sahip elemanları seç ve her biri için ortalama puanı yükle
+document.querySelectorAll('.rating').forEach(async (ratingElement) => {
+    const projectId = ratingElement.getAttribute('data-project-id'); // Proje ID'sini al
+
+    try {
+        // Belirtilen proje için mevcut ortalama puanı al
+        const response = await fetch(`/ratings/${projectId}`);
+        const { averageRating } = await response.json();
+
+        // Ortalama puanı ilgili ".rating" elemanına yazdır
+        document.querySelector(`.rating[data-project-id="${projectId}"] .average-rating`)
+            .textContent = `Average Rating : ${averageRating.toFixed(1)}`;
+    } catch (error) {
+        // Hata durumunda konsola yazdır
+        console.error('Error while saving score :', error);
+    }
+});
+</script>
+
+<script>
+document.querySelectorAll('.rating').forEach(ratingElement => {
+    const projectId = ratingElement.getAttribute('data-project-id');
+    const ratedKey = `rated_${projectId}`;
+    const submitButton = ratingElement.querySelector('.submit-rating');
+    const form = ratingElement.querySelector('.rating-form');
+
+    // LocalStorage kontrolü: Eğer buton devre dışı bırakıldıysa
+    if (localStorage.getItem(ratedKey)) {
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitted !'; // Kullanıcıya bilgi ver
+    }
+
+    // Formun gönderim olayını ele al
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const rating1 = parseFloat(form.querySelector('input[name="rating1"]').value);
+        const rating2 = parseFloat(form.querySelector('input[name="rating2"]').value);
+        const rating3 = parseFloat(form.querySelector('input[name="rating3"]').value);
+
+        // Geçersiz giriş kontrolü
+        if ([rating1, rating2, rating3].some(r => isNaN(r) || r < 1 || r > 5)) {
+            alert('Please enter a valid !');
+            return;
+        }   
+        // LocalStorage'a kaydet ve butonu devre dışı bırak
+        localStorage.setItem(ratedKey, true);
+        submitButton.disabled = true;
+        submitButton.textContent = 'Submitted !';
+    });
+});
+</script>

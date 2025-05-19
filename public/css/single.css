@@ -1,0 +1,65 @@
+.single{
+   width: 100%;
+   height: auto;
+   margin: 70px 0px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   padding: 20px;
+   
+}
+.single .wrapper{
+   width: 100%;
+   max-width: 1366px;
+   padding: 20px;
+   border: 1px solid #164863;
+   border-radius: 10px;
+   margin-bottom: 385px;
+}
+.single h2{
+   font-family: 'Times New Roman', Times, serif;
+   display: flex;
+   justify-content: space-between;
+   margin-bottom: 10px;
+   font-size: 2rem;
+}
+.single h2 .button button{
+   width: 35px;
+   height: 35px;
+   font-size: 1rem;
+   border-radius: 50%;
+   margin-right: 10px;
+   cursor: pointer;
+   border: none;
+   outline: none;
+   background-color: #427D9D;
+   
+}
+.single h2 .button button:nth-child(2){
+   background-color: #427D9D;
+   font-size: 1.1rem;
+}
+.single img{
+   padding: 10px;
+   border-radius: 20px;
+   height: 500px;
+   object-fit: cover;
+}
+.single p{
+   padding: 5px;
+   font-family: 'Times New Roman', Times, serif;
+}
+.single .authorAndDate{
+   width: 100%;
+   display: flex;
+   justify-content: space-between;
+   padding: 0px 10px;
+}
+.single .authorAndDate span{
+   font-size: 1.3rem;
+   font-weight: 700;
+   font-family: 'Times New Roman', Times, serif;
+}
+.single .authorAndDate span:nth-child(2){
+   font-family: 'Times New Roman', Times, serif;
+}

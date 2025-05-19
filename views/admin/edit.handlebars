@@ -1,0 +1,60 @@
+{{#if userLink}}
+{{#if data}}
+<div class="add">
+   <form class="form" id="edit">
+      <div class="text">
+         <input id="editID" type="text" style="display: none;" value="{{data._id}}">
+         <input type="text" name="title" placeholder="Your Title *" required value="{{data.title}}">
+         <textarea type="text" name="content" placeholder="Your Content *" required>{{data.content}}</textarea>
+         <input type="text" name="author" placeholder="Your Name *" required value="{{data.author}}">
+      </div>
+
+      <div class="button">
+         <button type="submit">
+            <i class="fa-solid fa-plus"></i>
+         </button>
+         <label for="file">
+            <i class="fa-solid fa-image"></i>
+         </label>
+         <input name="file" type="file" id="file" style="display: none;">
+      </div>
+   </form>
+</div>
+
+<script>
+   // Form ve gerekli HTML elementlerini seç
+   const edit = document.getElementById('edit'); // Düzenleme formu
+   const editID = document.getElementById('editID'); // Düzenlenecek öğenin ID'sini içeren input
+
+   // Form gönderildiğinde çalışacak olay dinleyicisi
+   edit.addEventListener('submit', (e) => {
+      e.preventDefault(); // Sayfanın yeniden yüklenmesini engelle
+
+      const id = editID.value; // ID değerini input'tan al
+      const formData = new FormData(e.target); // Form verilerini FormData nesnesine dönüştür
+      formData.append('id', id); // ID değerini form verilerine ekle
+      
+      // Form verilerini '/admin/edit' endpoint'ine gönder
+      fetch('/admin/edit', {
+         method: 'post', // POST metodu kullanılarak veri gönderiliyor
+         body: formData // Form verileri gönderiliyor
+      })
+         .then((response) => response.json()) // Sunucudan gelen yanıt JSON olarak ayrıştırılıyor
+         .then((res) => {
+            if (res.case) {
+               // Eğer işlem başarılıysa, konsola yazdır ve 2 saniye sonra anasayfaya yönlendir
+               console.log(res);
+               setTimeout(() => {
+                  window.location.href = '/';
+               }, 1000 * 2); // 2 saniye bekle
+            } else {
+               // Başarısız yanıt durumunda sonucu konsola yazdır
+               console.log(res);
+            }
+         })
+         .catch((err) => console.log(err)); // Fetch sırasında hata oluşursa konsola yazdır
+   });
+</script>
+
+{{/if}}
+{{/if}}
